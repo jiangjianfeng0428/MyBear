@@ -2,6 +2,8 @@ package io.mybear.tracker;
 
 import static io.mybear.common.CommonDefine.IP_ADDRESS_SIZE;
 
+import io.mybear.common.ErrorNo;
+
 /**
  * Created by jamie on 2017/6/21.
  */
@@ -14,8 +16,9 @@ public class TrackerProto {
     // storage heart beat
     public static final byte TRACKER_PROTO_CMD_STORAGE_BEAT = 83;
 
-
+    // storage join
     public static final byte TRACKER_PROTO_CMD_STORAGE_JOIN = 81;
+
     public final static int FDFS_PROTO_CMD_QUIT = 82;
     public final static int TRACKER_PROTO_CMD_STORAGE_REPORT_DISK_USAGE = 84; //report disk usage
     public final static int TRACKER_PROTO_CMD_STORAGE_REPLICA_CHG = 85; //repl new storage servers
@@ -103,4 +106,25 @@ public class TrackerProto {
     //for replace, insert when the meta item not exist, otherwise update ==it
     public static char STORAGE_SET_METADATA_FLAG_MERGE = 'M';
     public static String STORAGE_SET_METADATA_FLAG_MERGE_STR = "M";
+
+    public static byte fdfsValidateGroupName(byte[] groupName){
+        int index = 0;
+        while(index < groupName.length){
+            byte b = groupName[index];
+            if(groupName[index] == '\0'){
+                break;
+            }
+            index++;
+
+            if(!((b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9'))){
+                return ErrorNo.EINVAL;
+            }
+        }
+
+        if(index == 0){
+            return ErrorNo.EINVAL;
+        }
+
+        return 0;
+    }
 }

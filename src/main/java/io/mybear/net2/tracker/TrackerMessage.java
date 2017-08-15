@@ -85,6 +85,10 @@ public class TrackerMessage {
         return data.readByte(position++);
     }
 
+    public void readByte(byte[] dest, int len) {
+        position = data.readByte(dest, position, len);
+    }
+
     public byte[] getTrackerReplay() {
         byte[] bytes = new byte[10];
         bytes[0] = (byte) ((this.pkgLen >> 56) & 0xff);

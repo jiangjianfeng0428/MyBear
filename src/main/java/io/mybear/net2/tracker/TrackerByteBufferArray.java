@@ -144,6 +144,30 @@ public class TrackerByteBufferArray {
         return writedBlockLst.get(blockIndex).get(blockOffset);
     }
 
+
+    public long readByte(byte[] dest, long offset, int len){
+        final int blockCapasity = this.blockCapasity;
+        final int blockSize = writedBlockLst.size();
+        int blockIndex = (int)(offset / blockCapasity);
+        int blockOffset = (int)(offset % blockCapasity);
+//        logger.debug("read byte: {}", writedBlockLst.get(blockIndex).get(blockOffset));
+
+        int index = 0;
+        while(index < len && blockIndex < blockSize){
+            ByteBuffer buf = writedBlockLst.get(blockIndex);
+            dest[index] = buf.get(blockOffset);
+            blockOffset++;
+            index++;
+
+            if(blockOffset  == blockCapasity){
+                blockIndex++;
+                blockOffset = 0;
+            }
+        }
+
+        return offset + index;
+    }
+
     public int readInt(long offset){
         return (readByte(offset++) & 0xFF) << 24
             | (readByte(offset++) & 0xFF) << 16

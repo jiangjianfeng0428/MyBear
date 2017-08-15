@@ -16,4 +16,7 @@ public class CommonConstant {
     public static final int FDFS_VERSION_SIZE = 6;
 
     public static final int FDFS_DOMAIN_NAME_MAX_SIZE = 128;
+
+    // for IPv6 hex string
+    public static final int INET6_ADDRSTRLEN = 46;
 }

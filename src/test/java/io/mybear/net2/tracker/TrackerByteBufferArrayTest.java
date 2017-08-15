@@ -4,6 +4,7 @@ import io.mybear.common.ApplicationContext;
 import io.mybear.net2.ReactorBufferPool;
 import io.mybear.net2.SharedBufferPool;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 import org.junit.Assert;
 import org.junit.Before;
@@ -149,6 +150,22 @@ public class TrackerByteBufferArrayTest {
         Assert.assertEquals(i7, i);
         i = byteBufferArray.readInt(34);
         Assert.assertEquals(i8, i);
+    }
+
+    @Test
+    public void test(){
+        ByteBuffer buf1 = byteBufferArray.addNewBuffer();
+        logger.debug("buf1: {}", buf1);
+        IntStream.range(0, 20).forEach(i->buf1.put((byte)i));
+        logger.debug("after put: {}", buf1);
+
+        ByteBuffer buf2 = byteBufferArray.addNewBuffer();
+        logger.debug("buf2: {}", buf2);
+        IntStream.range(20, 30).forEach(i->buf2.put((byte)i));
+        logger.debug("after put: {}", buf2);
+        byte[] arr = new byte[25];
+        byteBufferArray.readByte(arr, 3, 24);
+        System.out.println(Arrays.toString(arr));
     }
 
     private void putLong(ByteBuffer buf, long l, int offset){
